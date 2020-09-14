@@ -13,3 +13,6 @@ A flutter app to get weather info every 3 hour based on your locations.
 
 The app is not published on any app store. It is a personal project and create for practice purposes.
 Designed by Minh Pham from [dribbble](https://dribbble.com)
+
+![weather_gif2](https://user-images.githubusercontent.com/27512622/93105065-e8480d80-f6ae-11ea-827d-a5c78ce16fe6.gif)
+
