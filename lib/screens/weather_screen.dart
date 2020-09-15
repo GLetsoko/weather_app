@@ -49,7 +49,9 @@ class _WeatherScreenState extends State<WeatherScreen> {
                     ),
                   ),
                 ),
-                WeatherCarousel(),
+                WeatherCarousel(
+                  weatherData: widget.weatherData,
+                ),
               ],
             ),
           ),

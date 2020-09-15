@@ -5,6 +5,8 @@ import 'package:weather_app/services/weather.dart';
 import 'package:weather_app/services/weather_forecast.dart';
 
 class WeatherCarousel extends StatefulWidget {
+  WeatherCarousel({this.weatherData});
+  final weatherData;
   @override
   _WeatherCarouselState createState() => _WeatherCarouselState();
 }
@@ -16,15 +18,10 @@ class _WeatherCarouselState extends State<WeatherCarousel> {
   @override
   void initState() {
     super.initState();
-    getWeatherData().then((value) {
-      setState(() {
-        data.addAll(value);
-      });
-    });
+    getWeatherData(widget.weatherData);
   }
 
-  Future<List<ForecastModel>> getWeatherData() async {
-    dynamic weatherData = await WeatherModel().getWeatherByLocation();
+  void getWeatherData(dynamic weatherData) {
     List<ForecastModel> weatherList = [];
     double temp;
     String day;
@@ -32,27 +29,31 @@ class _WeatherCarouselState extends State<WeatherCarousel> {
     String dateTime;
     String time;
 
-    if (weatherData != null) {
-      for (int i = 0; i < 6; i++) {
-        temp = weatherData['list'][i]['main']['temp'];
-        dateTime = weatherData['list'][i]['dt_txt'];
-        day = convertDate(dateTime);
-        time = getTime(dateTime);
-        weatherDescription =
-            weatherData['list'][0]['weather'][0]['description'];
-        weatherList.add(
-          ForecastModel(
-            temperature: temp.toInt(),
-            weatherSymbol: weather.getWeatherSymbold(weatherDescription),
-            day: day,
-            weatherDescription: weather.getWeatherIcon(weatherDescription),
-            time: time,
-          ),
-        );
+    setState(() {
+      if (weatherData != null) {
+        for (int i = 0; i < 6; i++) {
+          temp = weatherData['list'][i]['main']['temp'];
+          dateTime = weatherData['list'][i]['dt_txt'];
+          day = convertDate(dateTime);
+          time = getTime(dateTime);
+          weatherDescription =
+              weatherData['list'][0]['weather'][0]['description'];
+          weatherList.add(
+            ForecastModel(
+              temperature: temp.toInt(),
+              weatherSymbol: weather.getWeatherSymbold(weatherDescription),
+              day: day,
+              weatherDescription: weather.getWeatherIcon(weatherDescription),
+              time: time,
+            ),
+          );
+        }
       }
-    }
 
-    return weatherList;
+      weatherList.forEach((element) {
+        data.add(element);
+      });
+    });
   }
 
 //Extract and convert number of day into actual day. e.g 1 => Monday
@@ -92,7 +93,6 @@ class _WeatherCarouselState extends State<WeatherCarousel> {
   }
 
   //Extract hours from DateTime
-
   String getTime(String dateTime) {
     var timeData = DateTime.parse(dateTime);
     int hour = timeData.hour;
