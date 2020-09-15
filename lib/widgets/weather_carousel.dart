@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:weather_app/components/weather_content.dart';
+import 'package:weather_app/constants.dart';
 import 'package:weather_app/services/weather.dart';
 import 'package:weather_app/services/weather_forecast.dart';
 
@@ -141,41 +142,56 @@ class _WeatherCarouselState extends State<WeatherCarousel> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 500.0,
-      child: Column(
-        children: [
-          Expanded(
-            flex: 4,
-            child: PageView.builder(
-                itemCount: data.length,
-                onPageChanged: (value) {
-                  setState(() {
-                    pageIndex = value;
-                  });
-                },
-                itemBuilder: (context, index) {
-                  return WeatherContent(
-                    temperature: data[index].temperature,
-                    image: data[index].weatherSymbol,
-                    day: data[index].day,
-                  );
-                }),
-          ),
-          Expanded(
-            flex: 1,
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: data
-                    .asMap()
-                    .entries
-                    .map((e) => _buildIconList(e.key))
-                    .toList()),
-          )
-        ],
+//Display the widget if weather information is null
+  Widget _buildContainer() {
+    return Center(
+      child: Container(
+        width: 150.0,
+        child: Text(
+          'Unable to retrieve weather infomation',
+          style: kTextLabel,
+        ),
       ),
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return data == null
+        ? _buildContainer()
+        : Container(
+            height: 500.0,
+            child: Column(
+              children: [
+                Expanded(
+                  flex: 4,
+                  child: PageView.builder(
+                      itemCount: data.length,
+                      onPageChanged: (value) {
+                        setState(() {
+                          pageIndex = value;
+                        });
+                      },
+                      itemBuilder: (context, index) {
+                        return WeatherContent(
+                          temperature: data[index].temperature,
+                          image: data[index].weatherSymbol,
+                          day: data[index].day,
+                        );
+                      }),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: data
+                          .asMap()
+                          .entries
+                          .map((e) => _buildIconList(e.key))
+                          .toList()),
+                )
+              ],
+            ),
+          );
   }
 }

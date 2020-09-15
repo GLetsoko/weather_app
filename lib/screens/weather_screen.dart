@@ -24,7 +24,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
   void getWeather(dynamic weatherData) {
     setState(() {
       if (weatherData == null) {
-        cityName = 'Unable to retriev city name';
+        cityName = 'Unable to retrieve city name';
         return;
       }
       cityName = weatherData['city']['name'];
