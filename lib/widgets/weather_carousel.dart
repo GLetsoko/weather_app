@@ -32,21 +32,24 @@ class _WeatherCarouselState extends State<WeatherCarousel> {
     String dateTime;
     String time;
 
-    for (int i = 0; i < 5; i++) {
-      temp = weatherData['list'][i]['main']['temp'];
-      dateTime = weatherData['list'][i]['dt_txt'];
-      day = convertDate(dateTime);
-      time = getTime(dateTime);
-      weatherDescription = weatherData['list'][0]['weather'][0]['description'];
-      weatherList.add(
-        ForecastModel(
-          temperature: temp.toInt(),
-          weatherSymbol: weather.getWeatherSymbold(weatherDescription),
-          day: day,
-          weatherDescription: weather.getWeatherIcon(weatherDescription),
-          time: time,
-        ),
-      );
+    if (weatherData != null) {
+      for (int i = 0; i < 6; i++) {
+        temp = weatherData['list'][i]['main']['temp'];
+        dateTime = weatherData['list'][i]['dt_txt'];
+        day = convertDate(dateTime);
+        time = getTime(dateTime);
+        weatherDescription =
+            weatherData['list'][0]['weather'][0]['description'];
+        weatherList.add(
+          ForecastModel(
+            temperature: temp.toInt(),
+            weatherSymbol: weather.getWeatherSymbold(weatherDescription),
+            day: day,
+            weatherDescription: weather.getWeatherIcon(weatherDescription),
+            time: time,
+          ),
+        );
+      }
     }
 
     return weatherList;
@@ -89,7 +92,7 @@ class _WeatherCarouselState extends State<WeatherCarousel> {
   }
 
   //Extract hours from DateTime
-  // ignore: missing_return
+
   String getTime(String dateTime) {
     var timeData = DateTime.parse(dateTime);
     int hour = timeData.hour;
@@ -102,6 +105,7 @@ class _WeatherCarouselState extends State<WeatherCarousel> {
       hour = hour - 12;
       return hour.toString() + 'PM';
     }
+    return hour.toString() + 'PM';
   }
 
   //Build page view slide with temperature, weather sign and time.
@@ -144,20 +148,20 @@ class _WeatherCarouselState extends State<WeatherCarousel> {
 
 //Display the widget if weather information is null
   Widget _buildContainer() {
-    return Center(
-      child: Container(
-        width: 150.0,
-        child: Text(
-          'Unable to retrieve weather infomation',
-          style: kTextLabel,
-        ),
+    return Container(
+      padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.4),
+      width: 250.0,
+      child: Text(
+        'Unable to retrieve weather infomation',
+        textAlign: TextAlign.center,
+        style: kTextLabel,
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return data == null
+    return data.isEmpty
         ? _buildContainer()
         : Container(
             height: 500.0,
