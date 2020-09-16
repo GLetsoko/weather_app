@@ -4,7 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'location.dart';
 import 'networking.dart';
 
-const apiKey = 'your_api';
+const apiKey = '87637576533db340742002b244af22f8';
 const url = 'https://api.openweathermap.org/data/2.5/forecast';
 
 class WeatherModel {
@@ -34,7 +34,7 @@ class WeatherModel {
   IconData getWeatherIcon(String weatherDescription) {
     if (weatherDescription == 'clear sky')
       return FontAwesomeIcons.sun;
-    else if (weatherDescription == 'few clounds')
+    else if (weatherDescription == 'few clouds')
       return FontAwesomeIcons.cloudSun;
     else if (weatherDescription == 'scattered clouds')
       return FontAwesomeIcons.cloud;
